@@ -121,6 +121,13 @@ signal	GSDAT	:std_logic_vector(7 downto 0);
 signal	GSwrite	:std_logic;
 constant extcount	:integer	:=(sysclk*WR_WIDTH)/1000000;
 
+type wrstate_t is(
+	ws_idle,
+	ws_ramwait,
+	ws_write
+);
+signal	wrstate	:wrstate_t;
+
 component fmmod
 port(
 	txdat	:in std_logic_vector(7 downto 0);

@@ -11,7 +11,7 @@ generic(
 	FCFREQ		:integer	:=40000;		--FDC clock
 	ACFREQ		:integer	:=40000;		--Audio clock
 	DACFREQ		:integer	:=16000;		--Audio DAC freq
-	DEBUG			:std_logic_vector(7 downto 0)	:="00110010"	--nop,SPRBGONOFF,OPMCH_ONOFF,PAUSE_ONOFF,GRP_ONOFF,SCR_ONOFF,ADPCM_ONOFF,CYCLERESET
+	DEBUG			:std_logic_vector(7 downto 0)	:="00000000"	--nop,SPRBGONOFF,OPMCH_ONOFF,PAUSE_ONOFF,GRP_ONOFF,SCR_ONOFF,ADPCM_ONOFF,CYCLERESET
 );
 port(
 	ramclk	:in std_logic;
@@ -97,10 +97,12 @@ port(
 	pDip       : in std_logic_vector( 3 downto 0);     -- 0=ON,  1=OFF(default on shipment)
 	pLed       : out std_logic;
 	pPsw			: in std_logic_vector(1 downto 0);
+	pkbdtype	:in std_logic_vector(1 downto 0);
 	
 	pSramld		:in std_logic;
 	pSramst		:in std_logic;
 
+	pTonemode	:in std_logic_vector(1 downto 0);
 	pMidi_in		:in std_logic;
 	pMidi_out	:out std_logic;
 
@@ -379,15 +381,6 @@ signal	SASI_CD		:std_logic;
 signal	SASI_MSG	:std_logic;
 signal	SASI_RST	:std_logic;
 
-signal	SASI_SELf	:std_logic;
-signal	SASI_BSYf	:std_logic;
-signal	SASI_REQf	:std_logic;
-signal	SASI_ACKf	:std_logic;
-signal	SASI_IOf	:std_logic;
-signal	SASI_CDf	:std_logic;
-signal	SASI_MSGf	:std_logic;
-signal	SASI_RSTf	:std_logic;
-
 -- IO unit
 signal	IOU_rdat	:std_logic_vector(7 downto 0);
 signal	IOU_doe		:std_logic;
@@ -597,7 +590,6 @@ signal	pcm_clkdiv	:std_logic_vector(1 downto 0);
 --Sound DAC
 signal	mix_sndL,mix_sndR	:std_logic_vector(15 downto 0);
 signal	sndL,sndR	:std_logic_vector(15 downto 0);
-signal	dacsft		:std_logic;
 
 --for I2C I/F
 signal	SDAIN,SDAOUT	:std_logic;
@@ -1946,6 +1938,8 @@ port(
 	IVECT	:out std_logic_vector(7 downto 0);
 	INTack	:in std_logic;
 	IVack	:in std_logic_vector(7 downto 0);
+
+	kbdtype	:in std_logic_vector(1 downto 0);
 	
 	clk		:in std_logic;
 	ce      :in std_logic := '1';
@@ -2111,6 +2105,7 @@ port(
 --	monout	:out std_logic_vector(15 downto 0);
 
 	chenable:in std_logic_vector(7 downto 0)	:=(others=>'1');
+	tonemode:in std_logic_vector(1 downto 0)	:="00";
 
 	fmclk	:in std_logic;
 	pclk	:in std_logic;
